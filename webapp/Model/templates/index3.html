@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Image Classifier</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#imageForm').submit(function(event) {
+				event.preventDefault();
+				var formData = new FormData($(this)[0]);
+				$.ajax({
+					url: '/predict',
+					type: 'POST',
+					data: formData,
+					contentType: false,
+					processData: false,
+					success: function(response) {
+						$('#prediction').text('Predicted label: ' + response.label);
+					}
+				});
+			});
+
+			$('#feedbackForm').submit(function(event) {
+				event.preventDefault();
+				var formData = new FormData($(this)[0]);
+				$.ajax({
+					url: '/feedback',
+					type: 'POST',
+					data: formData,
+					contentType: false,
+					processData: false,
+					success: function(response) {
+						alert(response.message);
+					}
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<h1>Image Classifier</h1>
+	<form id="imageForm" method="post" enctype="multipart/form-data">
+		<input type="file" name="image" accept="image/*">
+		<button type="submit">Submit</button>
+	</form>
+	<div id="prediction"></div>
+	<form id="feedbackForm" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="image" id="feedbackImage">
+		<label for="feedbackLabel">Correct Label:</label>
+		<input type="text" name="label" id="feedbackLabel">
+		<button type="submit">Submit Feedback</button>
+	</form>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Classifier</title>
+</head>
+<body>
+    <h1>Image Classifier</h1>
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="submit" value="Predict">
+    </form>
+    <div id="result"></div>
+    <script>
+        // Handle the form submit event
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var form_data = new FormData(this);
+            // Send a POST request to the Flask app
+            fetch('/predict', {
+                method: 'POST',
+                body: form_data
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the predicted class label
+                document.querySelector('#result').innerHTML = 'Predicted class: ' + data.predicted_class;
+            });
+        });
+    </script>
+</body>
+</html>

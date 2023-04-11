@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Classifier</title>
+</head>
+<body>
+    <h1>Image Classifier</h1>
+    <form id="form" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="submit" value="Submit">
+    </form>
+    <p id="result"></p>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function() {
+            $('#form').submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData($(this)[0]);
+                $.ajax({
+                    url: '/predict',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        $('#result').text('Predicted label: ' + data.label);
+                    },
+                    error: function() {
+                        alert('Error');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
